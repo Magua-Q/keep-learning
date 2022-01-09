@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // const arr = [
+        //     {id: 1, file: 'www.baidu.com', name: 'test.xml'},
+        //     {id: 2, file: 'www.baidu.com', name: 'log.txt'},
+        //     {id: 3, file: 'www.baidu.com', name: 'test.xml'},
+        //     {id: 4, file: 'www.baidu.com', name: 'log.txt'}
+        // ]
+        // let obj = {}
+        // let res = arr.reduce((preValue,item) => {
+        //     obj[item.name] ? '' : obj[item.name] = true && preValue.push(item);
+        //     return preValue
+        // },[])
+        // let res = arr.filter((item,index,self) => {
+        //     console.log(self)
+        //     return self.findIndex(el=>el.name==item.name) === index
+        // })
+        // console.log(res)
+        const obj = {
+            "HelloTest0": [],
+            "HelloTest1": ["HelloTest0"],
+            "UpdateQtafTest9": [],
+            "UpdateQtafTest8": ["UpdateQtafTest9", "HelloTest1"],
+            "UpdateQtafTest3": [],
+            "UpdateQtafTest0": ["UpdateQtafTest8"]
+        }
+        let arr = []
+        let copyArr = []
+
+        for (let key in obj) {
+            const _obj = {
+                name: key,
+                source: obj[key]
+            }
+            arr.push(_obj)
+        }
+        console.log(arr)
+
+        let defaultX = -200
+        let defaultY = -200
+        const distance = 50
+        arr.forEach((item, index) => {
+            if (!item.source.length) {
+                item.level = 1
+                item.positionX = defaultX
+                item.positionY = defaultY
+                copyArr.push(item)
+                arr.splice(index, 1)
+                defaultY = defaultY + distance + 180
+            }
+        })
+
+        function createAsset(name, asset) {
+            let obj = {}
+            arr.forEach(item => {
+                if (item.name === name) {
+                    obj = {
+                        ...item,
+                        level: asset.level + 1,
+                        positionX: asset.positionX,
+                        positionY: asset.positionY + 180 + 50,
+                        flag: true
+                    }
+                }
+
+            })
+            return {
+                name: obj.name,
+                source: obj.source,
+                positionX: obj.positionX,
+                positionY: obj.positionY,
+                level: obj.level,
+                flag: obj.flag
+            }
+        }
+        function createGraph(arr, copyArr) {
+            let queue = [...copyArr]
+            for (const [index, asset] of queue.entries()) {
+                console.log(asset, index)
+                arr.forEach(item => {
+                    if (item.source.includes(asset.name)) {
+                        const child = createAsset(item.name, asset)
+                        if (queue.findIndex(el => el.name === child.name) === -1) {
+                            queue.splice(index+1,0,child)
+                        }
+                    }
+                })
+            }
+            return queue
+        }
+
+        const targetArr = createGraph(arr, copyArr)
+        console.log(targetArr)
+    </script>
+</body>
+
+</html>
