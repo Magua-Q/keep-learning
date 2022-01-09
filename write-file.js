@@ -36,3 +36,11 @@ ic.on('echo', function(data){
 ic.on('end', function() {
     process.exit()
 })
+
+process.stdin.setEncoding('utf8')
+process.stdin.on('readable', function() {
+    let input = process.stdin.read();
+    if (input) {
+        ic.check(input)
+    }
+})
