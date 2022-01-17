@@ -7,3 +7,15 @@
 ### 缺点
 + promise的实现还是基于回调的
 + promise一旦开始不能中断
+
+### 实现
+[promise/A+规范](https://promisesaplus.com/)
+ 
+### 关于promise的返回值问题
+> promise 无论成功或失败的回调的返回值，可以传递到外层的下一个then(promise链式调用)
++ 如果返回值是普通值（不是错误也不是promise），则传递到下一层的成功的回调中
++ 如果抛出异常或者出错的情况，则传递到下一层失败的回调中
++ 如果返回的是一个Promise的话，会通过promise的状态，决定调用下一个then回调函数
++ 每次执行完promise.then方法后返回的痘哦是一个新的Promise
+### 关于promise的错误处理
+如果离自己最近的then没有错误处理，会向下(下一个)找reject的回调
